@@ -28,6 +28,8 @@ export const Web3Provider = ({ children }) => {
                         setWeb3(web3);
                         setContract(contract);
                         status = 3;
+                        window.ethereum.on('accountsChanged', loadBlockchainData);
+                        window.ethereum.on('networkChanged', loadBlockchainData);
                     } else {
                         status = 2;
                     }

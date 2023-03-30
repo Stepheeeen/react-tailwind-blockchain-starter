@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import ipfsClient from 'ipfs-http-client';
+import { create } from 'ipfs-http-client';
+import { Buffer } from 'buffer';
+
 
 const useInfura = () => {
-    const [ipfs, setIpfs] = useState(null);
+    const projectId = 'ID';
+    const projectSecret = 'SECRET';
+    const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
 
-    const connectIpfs = async () => {
-        const projectId = '23...XXX';
-        const projectSecret = '23...XXX';
+    const uploadFile = async (file) => {
 
-        const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
-
+        let ipfs;
         try {
-            const ipfs = ipfsClient({
+            ipfs = create({
                 host: 'ipfs.infura.io',
                 port: 5001,
                 protocol: 'https',
@@ -19,19 +20,10 @@ const useInfura = () => {
                     authorization: auth
                 }
             });
-            setIpfs(ipfs);
-            console.log('Connected to IPFS via Infura');
         } catch (error) {
             console.error('Error connecting to IPFS via Infura', error);
-        }
-    };
-
-    const uploadFile = async (file) => {
-        if (!ipfs) {
-            console.error('IPFS client not connected');
             return;
         }
-
         try {
             const response = await ipfs.add(file);
             console.log('IPFS file hash:', response.cid.toString());
@@ -41,7 +33,7 @@ const useInfura = () => {
         }
     };
 
-    return { connectIpfs, uploadFile };
+    return { uploadFile };
 };
 
 export default useInfura;
