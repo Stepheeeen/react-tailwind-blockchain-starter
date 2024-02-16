@@ -12,51 +12,51 @@ export const Web3Provider = ({ children }) => {
 
     useEffect(() => {
         const loadBlockchainData = async () => {
-            let status = 0;
-            if (window.ethereum) {
-                const web3 = new Web3(window.ethereum);
-                try {
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    setAccount(accounts[0]);
-                    const networkId = await web3.eth.net.getId();
-                    const contractData = myContractABI.networks[networkId];
-                    if (contractData) {
-                        const contract = new web3.eth.Contract(
-                            myContractABI.abi,
-                            contractData.address
-                        );
-                        setWeb3(web3);
-                        setContract(contract);
-                        status = 3;
-                        window.ethereum.on('accountsChanged', loadBlockchainData);
-                        window.ethereum.on('networkChanged', loadBlockchainData);
-                    } else {
-                        status = 2;
-                    }
-                } catch (error) {
-                    console.error(error);
-                    status = 0;
-                }
-            } else if (window.web3) {
-                const web3 = window.web3;
-                setWeb3(web3);
-                const accounts = await web3.eth.getAccounts();
-                setAccount(accounts[0]);
-                const networkId = await web3.eth.net.getId();
-                const contractData = myContractABI.networks[networkId];
-                if (contractData) {
-                    const contract = new web3.eth.Contract(
-                        myContractABI.abi,
-                        contractData.address
-                    );
-                    setContract(contract);
-                    status = 3;
-                } else {
-                    status = 2;
-                }
-            } else {
-                status = 0;
-            }
+            let status = 3;
+            // if (window.ethereum) {
+            //     const web3 = new Web3(window.ethereum);
+            //     try {
+            //         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            //         setAccount(accounts[0]);
+            //         const networkId = await web3.eth.net.getId();
+            //         const contractData = myContractABI.networks[networkId];
+            //         if (contractData) {
+            //             const contract = new web3.eth.Contract(
+            //                 myContractABI.abi,
+            //                 contractData.address
+            //             );
+            //             setWeb3(web3);
+            //             setContract(contract);
+            //             status = 3;
+            //             window.ethereum.on('accountsChanged', loadBlockchainData);
+            //             window.ethereum.on('networkChanged', loadBlockchainData);
+            //         } else {
+            //             status = 2;
+            //         }
+            //     } catch (error) {
+            //         console.error(error);
+            //         status = 0;
+            //     }
+            // } else if (window.web3) {
+            //     const web3 = window.web3;
+            //     setWeb3(web3);
+            //     const accounts = await web3.eth.getAccounts();
+            //     setAccount(accounts[0]);
+            //     const networkId = await web3.eth.net.getId();
+            //     const contractData = myContractABI.networks[networkId];
+            //     if (contractData) {
+            //         const contract = new web3.eth.Contract(
+            //             myContractABI.abi,
+            //             contractData.address
+            //         );
+            //         setContract(contract);
+            //         status = 3;
+            //     } else {
+            //         status = 2;
+            //     }
+            // } else {
+            //     status = 0;
+            // }
             setConnectionStatus(status);
         };
 
